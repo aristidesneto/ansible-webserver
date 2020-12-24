@@ -1,0 +1,16 @@
+---
+# tasks file for roles/mysql
+- name: Copiando arquivos SQL para o servidor
+  copy:
+    src: "{{ item.name }}"
+    dest: "{{ item.dest }}/{{ item.name }}"
+  with_items: "{{ mysql_databases }}"
+
+- name: Import arquivo de dump do banco de dados
+  mysql_db:
+    name: '{{ item.database }}'
+    login_user: root
+    login_password: "{{ db_password }}"
+    state: import
+    target: "{{ item.dest }}/{{ item.name }}"
+  with_items: "{{ mysql_databases }}"

@@ -1,0 +1,35 @@
+---
+# tasks file for roles/nginx
+- name: Instalando Nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: Criando Virtual Host Nginx
+  template:
+    src: app.conf.j2
+    dest: /etc/nginx/sites-available/app.conf
+  notify: restart nginx
+
+- name: Desativando virtual host default do Nginx
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+ 
+- name: Ativando virtual host APP
+  file:
+    src: /etc/nginx/sites-available/app.conf
+    dest: /etc/nginx/sites-enabled/app.conf
+    state: link
+  notify: restart nginx
+
+- name: Criando diretório web
+  file:
+    path: /var/www/html/sakila
+    state: directory
+
+- name: Copiando arquivo index.php
+  template:
+    src: index.php.j2
+    dest: /var/www/html/sakila/index.php

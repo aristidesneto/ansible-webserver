@@ -1,0 +1,22 @@
+---
+# tasks file for roles/mysql
+- name: Instalando MySQL Server 5.7
+  apt: 
+    name: "{{ packages }}"
+    state: latest
+    update_cache: yes
+  vars:
+    packages:
+      - mysql-server
+      - python3-pymysql
+      - python3-mysqldb
+  notify: restart mysql
+
+- name: Certifica que o serviço do MySQL está rodando
+  service:
+    name: mysql
+    state: started
+    enabled: true
+
+- import_tasks: config.yml
+- import_tasks: import.yml

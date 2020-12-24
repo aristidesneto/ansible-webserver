@@ -1,0 +1,30 @@
+---
+# vars file for roles/mysql
+db_password: password
+
+mysql_users:
+  - user: aristides
+    password: user@123
+    host: '%'
+    priv: '*.*:ALL,GRANT'
+
+  - user: example
+    password: example@123
+    host: '%'
+    priv: 'example.*:SELECT,INSERT,UPDATE,DELETE,LOCK TABLES,EXECUTE,SHOW VIEW'
+
+  - user: sakila
+    password: sakila@123
+    host: '%'
+    priv: 'sakila.*:SELECT,INSERT,UPDATE,DELETE,LOCK TABLES,EXECUTE,SHOW VIEW'
+
+mysql_databases:
+  - database: example
+    encoding: utf8mb4
+    name: example.sql
+    dest: "{{ target_dump }}"
+
+  - database: sakila
+    encoding: utf8mb4
+    name: sakila.sql
+    dest: "{{ target_dump }}"

@@ -1,0 +1,46 @@
+server {
+ 
+    listen 80;
+    listen [::]:80;
+
+    # Directory root
+    root /var/www/html/sakila;
+    index index.php index.html;       
+
+    server_name {{ domain_site }};
+
+    # Log
+    access_log off;
+    error_log /var/log/nginx/error.log;
+
+    client_max_body_size 128M;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # pass PHP scripts to FastCGI server
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php{{ php_version }}-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+    }
+
+    # deny access to .htaccess files
+    location ~ /\.ht {
+            deny all;
+    }
+
+    location ~ /\.well-known {
+            allow all;
+    }
+
+    # Set header expirations on per-project basis
+    location ~* \.(?:ico|css|js|jpe?g|JPG|png|svg|woff)$ {
+            expires 365d;
+    }
+
+}

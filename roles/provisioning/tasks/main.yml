@@ -1,0 +1,46 @@
+---
+# tasks file for roles/provisioning
+- name: Atualizando repositório e pacotes do sistema
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Configurando timezone para America/Sao_Paulo
+  timezone:
+    name: America/Sao_Paulo
+
+- name: Set hostname
+  hostname:
+    name: "{{ srv_hostname }}"
+
+- name: Instalando pacotes essenciais
+  apt: 
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - aptitude
+      - acl
+      - ntp
+      - ntpdate
+      - git
+      - curl
+      - sudo
+      - libaio1
+      - zip
+      - unrar
+      # - python-pymysql
+      # - python-mysqldb
+
+# - name: Instalando dependencias do Python
+#   apt: 
+#     name: "{{ packages_pyhton }}"
+#     state: latest
+#   vars:
+#     packages_pyhton:
+#       - python-pip
+#       - python3-pip
+#       - python3-mysqldb
+#       - python-setuptools
+#       - virtualenv
+

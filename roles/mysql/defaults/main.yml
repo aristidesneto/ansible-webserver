@@ -1,0 +1,6 @@
+---
+# defaults file for roles/mysql
+db_password: password
+
+# Destino onde será salvo os arquivos dump SQL
+target_dump: /tmp

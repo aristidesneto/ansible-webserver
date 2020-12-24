@@ -1,0 +1,100 @@
+<?php
+
+// Dados de conexao com o banco
+define('MYSQL_HOST', 'localhost');
+define('MYSQL_USER', 'sakila');
+define('MYSQL_PASSWORD', 'sakila@123');
+define('MYSQL_DB_NAME', 'sakila');
+
+try
+{
+	// Realiza a conexao com o banco - PDO
+  $PDO = new PDO('mysql:host=' . MYSQL_HOST . ';dbname=' . MYSQL_DB_NAME, MYSQL_USER, MYSQL_PASSWORD);
+  $PDO->exec("set names utf8");
+
+
+  // Realiza a consulta no banco de todas as postagens ativas
+  $sql = "SELECT * FROM film ORDER BY title LIMIT 100";
+	$result = $PDO->query($sql);
+	$rows = $result->fetchAll(PDO::FETCH_ASSOC);
+} 
+catch (PDOException $e)
+{
+    echo 'Erro ao conectar com o banco: ' . $e->getMessage();
+}
+?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ansible - Provisionamento</title>
+
+    <!-- Bootstrap core CSS -->
+<link href="https://getbootstrap.com/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<meta name="theme-color" content="#7952b3">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/docs/5.0/examples/pricing/pricing.css" rel="stylesheet">
+  </head>
+  <body>
+    
+<header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+  <p class="h5 my-0 me-md-auto fw-normal">aristides.dev</p>
+</header>
+
+<main class="container">
+  <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Provisionado por Ansible</h1>
+    <p class="lead">Sucesso! Você acabou de instalar o Mysql, Nginx e o PHP. Seu servidor web está funcionando corretamente ;)</p>
+
+    <p class="lead">A listagem de filmes abaixo, está sendo obtida através do banco de dados Sakila que foi importado durante o provisionamento!</p>
+  </div>  
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <?php foreach($rows as $v) : ?>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Filme #<?= $v['film_id'] ?>: <?= $v['title'] ?></h5>
+            <p class="card-text"><strong>Ano:</strong> <?= $v['release_year'] ?></p>
+            <p class="card-text"><strong>Descrição:</strong> <?= $v['description'] ?></p>
+          </div>
+        </div>
+      </div>
+    <?php endforeach; ?>
+  </div>
+
+
+  <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+      <div class="col-12 col-md">
+        By Aristides Neto
+      </div>
+    </div>
+  </footer>
+</main>
+
+
+    
+  </body>
+</html>
