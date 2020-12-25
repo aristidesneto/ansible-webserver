@@ -4,7 +4,7 @@
   
   vars:
     # Hostname do servidor
-    srv_hostname: srv_ansible
+    srv_hostname: ansible
     # Adicione o IP do seu servidor ou o domínio do site (caso já esteja publicado)
     # Após o provisionamento você poderá acessar o endereço para acessar a página web
     domain_site: 192.168.10.100
