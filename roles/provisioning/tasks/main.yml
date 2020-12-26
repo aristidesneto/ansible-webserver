@@ -15,10 +15,9 @@
 
 - name: Instalando pacotes essenciais
   apt: 
-    name: "{{ packages }}"
     state: latest
-  vars:
-    packages:
+    pkg:
+      - python3-apt
       - aptitude
       - acl
       - ntp
@@ -28,4 +27,4 @@
       - sudo
       - libaio1
       - zip
-      - unrar
+      - unrar-free

@@ -1,17 +1,36 @@
 ---
 # tasks file for roles/php
+- name: Instalando pacotes necessários
+  apt:
+    update_cache: yes
+    state: latest
+    pkg:
+      - lsb-release
+      - apt-transport-https
+      - ca-certificates
+
 - name: Adicionando PPA para instalação do PHP {{ php_version }}
   apt_repository:
     repo: ppa:ondrej/php
     state: present
     update_cache: yes
+  when: ansible_facts['distribution'] == 'Ubuntu'
+
+- name: Download da chave de assinatura
+  get_url:
+    url: https://packages.sury.org/php/apt.gpg
+    dest: /etc/apt/trusted.gpg.d/php.gpg
+  when: ansible_facts['distribution'] == 'Debian'
+
+- name: Adiciona o repositório no sources lists
+  shell: sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
+  when: ansible_facts['distribution'] == 'Debian'
 
 - name: Instalando PHP-FPM {{ php_version }}
   apt:
-    name: "{{ packages }}"
     state: latest
-  vars:
-    packages:
+    update_cache: yes
+    pkg:
       - php-memcached
       - "php{{ php_version }}-common"
       - "php{{ php_version }}-cli"

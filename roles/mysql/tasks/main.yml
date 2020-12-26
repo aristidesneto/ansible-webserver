@@ -1,15 +1,25 @@
 ---
 # tasks file for roles/mysql
-- name: Instalando MySQL Server 5.7
+- name: Instalando MySQL Server - Ubuntu
   apt: 
-    name: "{{ packages }}"
     state: latest
     update_cache: yes
-  vars:
-    packages:
+    pkg:
       - mysql-server
       - python3-pymysql
       - python3-mysqldb
+  when: ansible_facts['distribution'] == 'Ubuntu'
+  notify: restart mysql
+
+- name: Instalando MariaDB - Debian
+  apt: 
+    state: latest
+    update_cache: yes
+    pkg:
+      - mariadb-server
+      - python3-pymysql
+      - python3-mysqldb
+  when: ansible_facts['distribution'] == 'Debian'
   notify: restart mysql
 
 - name: Certifica que o serviço do MySQL está rodando
